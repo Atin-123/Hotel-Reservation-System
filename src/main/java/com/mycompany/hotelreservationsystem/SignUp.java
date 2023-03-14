@@ -292,17 +292,34 @@ public class SignUp extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "All the Fields Should be Mandatorily Filled!");
         }else{
             try{
-                if(DatabaseLogic.isUserAlreadyPresent(String.valueOf(jTextField3.getText()), String.valueOf(jTextField4.getText()), String.valueOf(jTextField10.getText()))){
+                if(DatabaseLogic.isUserAlreadyPresent(String.valueOf(jTextField3.getText()), String.valueOf(jTextField5.getText()), String.valueOf(jTextField10.getText()))){
                     JOptionPane.showMessageDialog(null, "User Already Present in the Database! Kindly Go Back and SignIn");
+                    LogIn.logIn();
+                    dispose();
                 }else{
                     String dob = jTextField4.getText()+"-"+jTextField6.getText()+"-"+jTextField7.getText();
                     if(jRadioButton1.isSelected()){
-                        DatabaseLogic.enterUsertoDb(String.valueOf(jTextField2.getText()),String.valueOf(jTextField1.getText()),String.valueOf(jTextField3.getText()),String.valueOf(jTextField5.getText()), dob, "m", String.valueOf(jTextField8.getText()), String.valueOf(jTextField9.getText()), String.valueOf(jTextField10.getText()));
+                        if(DatabaseLogic.enterUsertoDb(String.valueOf(jTextField2.getText()),String.valueOf(jTextField1.getText()),String.valueOf(jTextField3.getText()),String.valueOf(jTextField5.getText()), dob, "m", String.valueOf(jTextField8.getText()), String.valueOf(jTextField9.getText()), String.valueOf(jTextField10.getText()))){
+                            JOptionPane.showMessageDialog(null, "Successfully Registered!");
+                        }else{
+                            JOptionPane.showMessageDialog(null, "Error! Couldn't Insert User Details!");
+                        }
                     }else if(jRadioButton2.isSelected()){
-                        DatabaseLogic.enterUsertoDb(String.valueOf(jTextField2.getText()),String.valueOf(jTextField1.getText()),String.valueOf(jTextField3.getText()),String.valueOf(jTextField5.getText()), dob, "f", String.valueOf(jTextField8.getText()), String.valueOf(jTextField9.getText()), String.valueOf(jTextField10.getText()));
+                        if(DatabaseLogic.enterUsertoDb(String.valueOf(jTextField2.getText()),String.valueOf(jTextField1.getText()),String.valueOf(jTextField3.getText()),String.valueOf(jTextField5.getText()), dob, "f", String.valueOf(jTextField8.getText()), String.valueOf(jTextField9.getText()), String.valueOf(jTextField10.getText()))){
+                            JOptionPane.showMessageDialog(null, "Successfully Registered!");
+                            
+                        }else{
+                            JOptionPane.showMessageDialog(null, "Error! Couldn't Insert User Details!");
+                        }
                     }else if(jRadioButton3.isSelected()){
-                        DatabaseLogic.enterUsertoDb(String.valueOf(jTextField2.getText()),String.valueOf(jTextField1.getText()),String.valueOf(jTextField3.getText()),String.valueOf(jTextField5.getText()), dob, "o", String.valueOf(jTextField8.getText()), String.valueOf(jTextField9.getText()), String.valueOf(jTextField10.getText()));
+                        if (DatabaseLogic.enterUsertoDb(String.valueOf(jTextField2.getText()),String.valueOf(jTextField1.getText()),String.valueOf(jTextField3.getText()),String.valueOf(jTextField5.getText()), dob, "o", String.valueOf(jTextField8.getText()), String.valueOf(jTextField9.getText()), String.valueOf(jTextField10.getText()))){
+                            JOptionPane.showMessageDialog(null, "Successfully Registered!");
+                        }else{
+                            JOptionPane.showMessageDialog(null, "Error! Couldn't Insert User Details!");
+                        }
                     }
+                    LogIn.logIn();
+                    dispose();
                 }
             }catch(Exception e){
                 JOptionPane.showMessageDialog(null, e);

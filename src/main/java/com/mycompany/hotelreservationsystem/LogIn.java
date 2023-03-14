@@ -173,9 +173,12 @@ public class LogIn extends javax.swing.JFrame {
             }else{
                 try{
                     if(DatabaseLogic.isValidUser(String.valueOf(jTextField1.getText()), String.valueOf(jPasswordField1.getPassword()))){
-                        System.out.println("Valid User");
+                        UserDashboard.showUserDashboard(String.valueOf(DatabaseLogic.getNameOfUser(jTextField1.getText())));
+                        dispose();
                     }else{
-                        System.out.println("Invalid User");
+                        JOptionPane.showMessageDialog(null, "No User found with this username! Kindly Sign Up!");
+                        jTextField1.setText("");
+                        jPasswordField1.setText("");
                     }
                 }catch(Exception e){
                     JOptionPane.showMessageDialog(null, e);
