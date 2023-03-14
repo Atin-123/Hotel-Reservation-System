@@ -161,7 +161,7 @@ public class LogIn extends javax.swing.JFrame {
                 try{
                     if(DatabaseLogic.isValidStaff(Integer.parseInt(jTextField1.getText()), String.valueOf(jPasswordField1.getPassword()))){
                         setVisible(false);
-                        Dashboard.dashboard();
+                        Dashboard.dashboard(String.valueOf(DatabaseLogic.getNameOfStaff(jTextField1.getText())), jTextField1.getText());
                     }else{
                         JOptionPane.showMessageDialog(null, "Wrong UserName or Password!");
                     }

@@ -203,4 +203,177 @@ public class DatabaseLogic {
         con.close();
         
     }
+    
+    public static boolean isAlreadyRoomBooked(String roomNo)throws Exception{
+        /*------------------ Loading MySQL Driver ---------------*/
+        Class.forName("com.mysql.cj.jdbc.Driver");
+        Connection con = DriverManager.getConnection(url, user, passowrd);
+        
+        Statement stmt = con.createStatement();
+
+        ResultSet rs = stmt.executeQuery("select exists(select * from test.room_details where room_no in (select bd.room_no from test.booking_details bd where check_out_date > curdate()) and room_no = '"+roomNo+"');");
+        rs.next();
+        
+        int count = rs.getInt(1);
+        
+        if (count == 1){
+            return true;
+        }
+        
+        stmt.close();
+        con.close();
+        return false;
+    }
+    
+    public static boolean insertBookingDetails(String username, String roomNo, String checkInDate, String checkOutDate, String fooding)throws Exception{
+        /*------------------ Loading MySQL Driver ---------------*/
+        Class.forName("com.mysql.cj.jdbc.Driver");
+        Connection con = DriverManager.getConnection(url, user, passowrd);
+        
+        Statement stmt = con.createStatement();
+        try{
+            System.out.println(username);
+            stmt.executeUpdate("insert into booking_details(user_name, room_no, check_in_date, check_out_date, fooding) values ('"+username+"', '"+roomNo+"', '"+checkInDate+"', '"+checkOutDate+"', '"+fooding+"');");
+            return true;
+        }catch(Exception e){
+            System.out.println(e);
+            return false;
+        }
+    }
+        
+    public static String selectUsernameOfUser(String fname)throws Exception{
+        /*------------------ Loading MySQL Driver ---------------*/
+        Class.forName("com.mysql.cj.jdbc.Driver");
+        Connection con = DriverManager.getConnection(url, user, passowrd);
+
+        Statement stmt = con.createStatement();
+        try{
+            System.out.println(fname);
+            ResultSet rs = stmt.executeQuery("select user_name from test.guest where fname = '"+fname+"';");
+        rs.next();
+            String name = rs.getString("user_name");
+            return name;
+        }catch(Exception e){
+            System.out.println(e);
+            return "";
+        }
+    }
+        
+    
+    public static int getRoomAmount(String roomNo) throws Exception{
+        /*------------------ Loading MySQL Driver ---------------*/
+        Class.forName("com.mysql.cj.jdbc.Driver");
+        Connection con = DriverManager.getConnection(url, user, passowrd);
+
+        Statement stmt = con.createStatement();
+        try{
+            System.out.println(roomNo);
+            ResultSet rs = stmt.executeQuery("select cost_per_night from room_details where room_no = '"+roomNo+"';");
+        rs.next();
+            int amount = rs.getInt("cost_per_night");
+            System.out.println(amount);
+            return amount;
+        }catch(Exception e){
+            System.out.println(e);
+            return 0;
+        }
+       
+    }
+    
+    public static boolean insertPaymentDetails(String username, int amount)throws Exception{
+        /*------------------ Loading MySQL Driver ---------------*/
+        Class.forName("com.mysql.cj.jdbc.Driver");
+        Connection con = DriverManager.getConnection(url, user, passowrd);
+        
+        Statement stmt = con.createStatement();
+        try{
+            System.out.println(username);
+            stmt.executeUpdate("insert into payment_details(payment_amount, payment_status, user_name) values ("+amount+", 'success', '"+username+"');");
+            return true;
+        }catch(Exception e){
+            System.out.println(e);
+            return false;
+        }
+    }
+    
+    public static boolean isPaymentExist(String username) throws Exception{
+        /*------------------ Loading MySQL Driver ---------------*/
+        Class.forName("com.mysql.cj.jdbc.Driver");
+        Connection con = DriverManager.getConnection(url, user, passowrd);
+        
+        Statement stmt = con.createStatement();
+
+        ResultSet rs = stmt.executeQuery("select exists(select * from test.payment_details where user_name = '"+username+"');");
+        rs.next();
+        
+        int count = rs.getInt(1);
+        
+        if (count == 1){
+            return true;
+        }
+        
+        stmt.close();
+        con.close();
+        return false;
+    }
+    
+    
+    
+    
+    
+    /*------------------------------------------------------for staff--------------------------------*/
+    public static String getStaffPost(int staffId) throws Exception{
+        /*------------------ Loading MySQL Driver ---------------*/
+        Class.forName("com.mysql.cj.jdbc.Driver");
+        Connection con = DriverManager.getConnection(url, user, passowrd);
+
+        Statement stmt = con.createStatement();
+        try{
+            System.out.println(staffId);
+            ResultSet rs = stmt.executeQuery("select post from staff where staff_id = '"+staffId+"';");
+        rs.next();
+            String postOfStaff = rs.getString("post");
+            return postOfStaff;
+        }catch(Exception e){
+            System.out.println(e);
+            return "";
+        }
+    }
+    
+    public static String getNameOfStaff(String staffId)throws Exception{
+        /*------------------ Loading MySQL Driver ---------------*/
+        Class.forName("com.mysql.cj.jdbc.Driver");
+        Connection con = DriverManager.getConnection(url, user, passowrd);
+
+        Statement stmt = con.createStatement();
+        try{
+            int idOfStaff = Integer.parseInt(staffId);
+            System.out.println(staffId);
+            ResultSet rs = stmt.executeQuery("select staff_fname from staff where staff_id = '"+idOfStaff+"';");
+            rs.next();
+            String nameOfStaff = rs.getString("staff_fname");
+            return nameOfStaff;
+        }catch(Exception e){
+            System.out.println(e);
+            return "";
+        }
+
+    }
+    
+    public static int getDateDifference(String checkOutDate, String checkInDate)throws Exception{
+        Class.forName("com.mysql.cj.jdbc.Driver");
+        Connection con = DriverManager.getConnection(url, user, passowrd);
+
+        Statement stmt = con.createStatement();
+        try{
+            
+            ResultSet rs = stmt.executeQuery("select datediff('"+checkOutDate+"', '"+checkInDate+"') as date_difference;");
+            rs.next();
+            int dateDiff = rs.getInt("date_difference");
+            return dateDiff;
+        }catch(Exception e){
+            System.out.println(e);
+            return 0;
+        }
+    }
 }
